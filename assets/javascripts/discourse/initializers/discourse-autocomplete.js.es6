@@ -7,6 +7,7 @@ export default {
   initialize() {},
   _initialize(options) {
     //Autocomplete function
+    console.log('in autocomplete');
     var autocomplete = function(query, cb) {
         var results = $.map([0], function() {
             //Get text from the input field
@@ -38,7 +39,7 @@ export default {
                 },
                 complete: function(XMLHttpRequest) {
                         this; 
-                    }
+                }
             });
             //Parse the results and return them
 
@@ -47,6 +48,7 @@ export default {
                 resultsLength = Object.keys(resultsData.hits).length,
                 resultsType = resultsData.hits._type,
                 datum = [];
+            console.log(response);
 
             for (var i = 0; i < resultsLength; i++) {
               var resultsArray = resultsData.hits[i]._source,
@@ -107,7 +109,7 @@ export default {
       highlight: true,
       minLength: 1
       }, 
-      [{
+      {
       name: 'posts',
       displayKey: 'value',
       limit: 4,
@@ -162,10 +164,8 @@ export default {
             return '<div class="es-dataset-tags"><a href="'+ value.tag_url +'"><div class="hit-tag"><span class="hit-tag-name">#'+ value.tag_name +' </span><span class="hit-tag-topic_count" title="Number of topics with this tag"> '+ value.tag_topic_count +'</span></div></a></div>'
           }
         }
-
-
       }
-    }]);
+    });
 
 
     $("#search-box").on('focus', function (event) {
