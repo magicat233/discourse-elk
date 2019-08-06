@@ -7,8 +7,6 @@ import discourseAutocomplete from './discourse-autocomplete';
 export default {
   name : "discourse-ubnt-elk",
   initialize(container) {
-  console.log("es-enabled");
-  console.log(container.siteSettings.es_enabled);
     withPluginApi('0.8.8', (api) => {
     console.log("es-enabled");
 
