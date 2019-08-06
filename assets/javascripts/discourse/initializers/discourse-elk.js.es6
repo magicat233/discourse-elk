@@ -46,7 +46,7 @@ function elk(api){
 }
 
 export default {
-  name : "discourse-ubnt-elk",
+  name : "discourse-elk",
   initialize(container) {
     withPluginApi('0.8.8', api => elk(api, container));
 
