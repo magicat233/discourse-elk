@@ -1,0 +1,4 @@
+plugins:
+  es_enabled:
+    default: true
+    client: true

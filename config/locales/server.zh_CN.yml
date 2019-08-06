@@ -1,0 +1,6 @@
+# ubnt plugin language trans file
+
+zh_CN:
+  site_settings:
+    es_enabled: '启用 es 搜索引擎插件'
+
