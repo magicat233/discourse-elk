@@ -4,12 +4,9 @@ import DiscourseURL from 'discourse/lib/url';
 import { withPluginApi } from 'discourse/lib/plugin-api';
 import discourseAutocomplete from './discourse-autocomplete';
 
-export default {
-  name : "discourse-ubnt-elk",
-  initialize(container) {
-    withPluginApi('0.8.8', (api) => {
-    console.log("es-enabled");
-
+function elk(api){
+  const container = api.container;
+  const siteSettings = container.lookup("site-settings:main");
       api.modifyClass('component:site-header', {
         @on("didInsertElement")
         initializeElk() {
@@ -18,7 +15,7 @@ export default {
             $("body").addClass("es-enabled");
             setTimeout(() => {
               discourseAutocomplete._initialize({});
-            }, 100);
+            }, 1000);
           }
         }
       });
@@ -46,7 +43,12 @@ export default {
           return helper.attach('es');
         }
       });
+}
 
-    });
+export default {
+  name : "discourse-ubnt-elk",
+  initialize(container) {
+    withPluginApi('0.8.8', api => elk(api, container));
+
   }
 }
