@@ -21,7 +21,7 @@ export default {
             
             //Ajax call to ES make sure this matches YOUR ES info
             var request = $.ajax({
-                url : "http://test-discourse.ubnt.com.cn:9200/_search",
+                url : "https://es-test-discourse.ubnt.com.cn/_search",
                 type : "POST",
                 async : false,
                 data : JSON.stringify(json),
