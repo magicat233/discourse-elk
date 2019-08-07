@@ -42,13 +42,13 @@ export default {
             var response = JSON.parse(request.responseText),
                 resultsData = response.hits,
                 resultsLength = Object.keys(resultsData.hits).length,
-                resultsType = resultsData.hits._type,
+                resultsIndex = resultsData.hits._index,
                 datum = [];
             console.log(response);
             for (var i = 0; i < resultsLength; i++) {
               var resultsArray = resultsData.hits[i]._source,
-                  resultsType = resultsData.hits[i]._type;
-              if (resultsType == "users") {
+                  resultsIndex = resultsData.hits[i]._index;
+              if (resultsIndex == "discourse-users") {
                 var user_avatar = resultsArray.avatar_template.replace("\{size}", 50);
                 datum.push({
                     // user
@@ -57,14 +57,14 @@ export default {
                     user_likes_received: resultsArray.likes_received,
                     user_url: resultsArray.url
                 });
-              }else if (resultsType == "tags") {
+              }else if (resultsIndex == "discourse-tags") {
                 datum.push({
                     // tag
                     tag_name: resultsArray.name,
                     tag_topic_count: resultsArray.topic_count,
                     tag_url:resultsArray.url
                 });
-              }else if (resultsType == "posts") {
+              }else if (resultsIndex == "discourse-posts") {
                 var topic_name = resultsArray.topic.title,
                     topic_view = resultsArray.topic.views,
                     topic_url = resultsArray.topic.url,
