@@ -44,7 +44,7 @@ export default {
                 resultsLength = Object.keys(resultsData.hits).length,
                 resultsIndex = resultsData.hits._index,
                 datum = [];
-            console.log(response);
+
             for (var i = 0; i < resultsLength; i++) {
               var resultsArray = resultsData.hits[i]._source,
                   resultsIndex = resultsData.hits[i]._index;
