@@ -55,14 +55,14 @@ export default {
                     user_avatar_template: user_avatar,
                     user_username: resultsArray.username,
                     user_likes_received: resultsArray.likes_received,
-                    user_url: resultsArray.url
+                    url: resultsArray.url
                 });
               }else if (resultsIndex == "discourse-tags") {
                 datum.push({
                     // tag
                     tag_name: resultsArray.name,
                     tag_topic_count: resultsArray.topic_count,
-                    tag_url:resultsArray.url
+                    url:resultsArray.url
                 });
               }else if (resultsIndex == "discourse-posts") {
                 var topic_name = resultsArray.topic.title,
@@ -79,7 +79,7 @@ export default {
                     // post
                     post_topic_name: topic_name,
                     post_topic_view: topic_view,
-                    post_topic_url: topic_url,
+                    url: topic_url,
                     post_category: category,
                     post_category_color: category_color,
                     post_category_url: category_url,
@@ -119,7 +119,7 @@ export default {
           if (value.post_topic_name == undefined) {
             return '<span></span>'
           }else{
-            return '<div class="es-dataset-posts"><div class="hit-post"><div class="hit-post-title-holder"><span class="hit-post-topic-title"><a href="' + value.post_topic_url + '">'+ value.post_topic_name + '</a></span><span class="hit-post-topic-views" title="Number of times the topic has been viewed">'+ value.post_topic_view + '</span></div><div class="hit-post-category-tags"><span class="hit-post-category"><span class="badge-wrapper bullet"><span class="badge-category-bg" style="background-color: #'+ value.post_category_color +';"></span><a class="badge-category hit-post-category-name" href="'+ value.post_category_url +'">'+ value.post_category + '</a></span></span></div><div class="hit-post-content-holder"><a class="hit-post-username" href="'+ value.post_author_url +'">'+ value.post_author + '</a>:<span class="hit-post-content">'+ value.post_pre +'</span></div></div></div>'
+            return '<div class="es-dataset-posts"><div class="hit-post"><div class="hit-post-title-holder"><span class="hit-post-topic-title"><a href="' + value.url + '">'+ value.post_topic_name + '</a></span><span class="hit-post-topic-views" title="Number of times the topic has been viewed">'+ value.post_topic_view + '</span></div><div class="hit-post-category-tags"><span class="hit-post-category"><span class="badge-wrapper bullet"><span class="badge-category-bg" style="background-color: #'+ value.post_category_color +';"></span><a class="badge-category hit-post-category-name" href="'+ value.post_category_url +'">'+ value.post_category + '</a></span></span></div><div class="hit-post-content-holder"><a class="hit-post-username" href="'+ value.post_author_url +'">'+ value.post_author + '</a>:<span class="hit-post-content">'+ value.post_pre +'</span></div></div></div>'
             
           }
         }
@@ -135,7 +135,7 @@ export default {
           if (value.user_username == undefined) {
             return '<span></span>'
           }else{
-            return '<div class="es-dataset-users"><a href="'+ value.user_url +'"><div class="hit-user-left"><img class="hit-user-avatar" src="'+ value.user_avatar_template + '" /></div><div class="hit-user-right"><div class="hit-user-username-holder"><span class="hit-user-username">@'+ value.user_username + '</span><span class="hit-user-custom-ranking" title="Number of likes the user has received"><span class="hit-user-like-heart"> ❤ </span>' + value.user_likes_received + '</span></div></div></a></div>'
+            return '<div class="es-dataset-users"><a href="'+ value.url +'"><div class="hit-user-left"><img class="hit-user-avatar" src="'+ value.user_avatar_template + '" /></div><div class="hit-user-right"><div class="hit-user-username-holder"><span class="hit-user-username">@'+ value.user_username + '</span><span class="hit-user-custom-ranking" title="Number of likes the user has received"><span class="hit-user-like-heart"> ❤ </span>' + value.user_likes_received + '</span></div></div></a></div>'
           }
         }
       }
@@ -155,12 +155,15 @@ export default {
           if (value.tag_name == undefined) {
             return '<span></span>'
           }else{
-            return '<div class="es-dataset-tags"><a href="'+ value.tag_url +'"><div class="hit-tag"><span class="hit-tag-name">#'+ value.tag_name +' </span><span class="hit-tag-topic_count" title="Number of topics with this tag"> '+ value.tag_topic_count +'</span></div></a></div>'
+            return '<div class="es-dataset-tags"><a href="'+ value.url +'"><div class="hit-tag"><span class="hit-tag-name">#'+ value.tag_name +' </span><span class="hit-tag-topic_count" title="Number of topics with this tag"> '+ value.tag_topic_count +'</span></div></a></div>'
           }
         }
 
 
       }
+    }).on('typeahead:selected', function(event, datum) {
+      console.log(datum);
+      window.location = datum.url; 
     });
 
     $("#search-box").on('focus', function (event) {
