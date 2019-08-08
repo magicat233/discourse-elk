@@ -42,6 +42,7 @@ export default {
             
             //Ajax call to ES make sure this matches YOUR ES info
             var request = callAjax(esUrl, json);
+            console.log(request);
             console.log(request.responseText);
             //Parse the results and return them
             var response = JSON.parse(request.responseText),
