@@ -15,7 +15,7 @@ function elk(api){
             $("body").addClass("es-enabled");
             setTimeout(() => {
               discourseAutocomplete._initialize({});
-            }, 1000);
+            }, 100);
           }
         }
       });

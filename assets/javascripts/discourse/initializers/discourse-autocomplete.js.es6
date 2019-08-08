@@ -4,7 +4,28 @@ export default {
   initialize() {},
   _initialize(options) {
     //Autocomplete function
-    var autocomplete = function(query, cb) {
+    function callAjax(url,json){
+      return $.ajax({
+                url : url,
+                type : "POST",
+                data : JSON.stringify(json),
+                contentType : "application/json; charset=utf-8",
+                dataType : "json",
+                // async : false,
+                success : function(data) {
+                    return (data);
+                },
+                failure : function(errMsg) {
+                    alert(errMsg);
+                },
+                complete: function(XMLHttpRequest) {
+                        this; 
+                    }
+            });
+    }
+
+    var esUrl = 'http://10.100.2.190:9200/_search',
+        autocomplete = function(query, cb) {
         var results = $.map([0], function() {
             //Get text from the input field
             var text = $('#search-box').val();
@@ -20,25 +41,9 @@ export default {
                     };
             
             //Ajax call to ES make sure this matches YOUR ES info
-            var request = $.ajax({
-                url : "https://test-discourse.ubnt.com.cn/elasticsearch/_search",
-                type : "POST",
-                async : false,
-                data : JSON.stringify(json),
-                contentType : "application/json; charset=utf-8",
-                dataType : "json",
-                success : function(data) {
-                    return (data);
-                },
-                failure : function(errMsg) {
-                    alert(errMsg);
-                },
-                complete: function(XMLHttpRequest) {
-                        this; 
-                    }
-            });
+            var request = callAjax(esUrl, json);
+            console.log(request.responseText);
             //Parse the results and return them
-
             var response = JSON.parse(request.responseText),
                 resultsData = response.hits,
                 resultsLength = Object.keys(resultsData.hits).length,
