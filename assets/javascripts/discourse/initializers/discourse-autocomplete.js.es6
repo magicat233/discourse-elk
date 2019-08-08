@@ -24,7 +24,7 @@ export default {
             });
     }
 
-    var esUrl = 'http://10.100.2.190:9200/_search',
+    var esUrl = 'https://test-discourse.ubnt.com.cn/elasticsearch/_search',
         autocomplete = function(query, cb) {
         var results = $.map([0], function() {
             //Get text from the input field
