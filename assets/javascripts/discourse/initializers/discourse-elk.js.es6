@@ -32,6 +32,9 @@ function elk(api){
                 name: "q",
                 placeholder: "Search the forum...",
                 autocomplete: "off"
+              }),
+              h('img.Typeahead-spinner',{
+                src: "https://hugelolcdn.com/comments/1225799.gif"
               })
             ])
           ];

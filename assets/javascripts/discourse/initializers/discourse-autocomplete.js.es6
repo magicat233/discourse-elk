@@ -25,7 +25,7 @@ export default {
     }
 
     var esUrl = 'https://test-discourse.ubnt.com.cn/elasticsearch/_search',
-        autocomplete = function(query, cb) {
+        autocomplete = function(query, processSync, processAsync) {
         var results = $.map([0], function() {
             //Get text from the input field
             var text = $('#search-box').val();
@@ -102,7 +102,7 @@ export default {
             return datum;
         });
 
-        cb(results);
+        processAsync(results);
     };
 
 
@@ -115,6 +115,7 @@ export default {
       displayKey: 'value',
       limit: 4,
       source: autocomplete,
+      async: true,
       templates: {
         empty: [
           '<div class="empty-message">',
@@ -135,6 +136,7 @@ export default {
       displayKey: 'value',
       limit: 4,
       source: autocomplete,
+      async: true,
       templates: {
         empty: "",
         suggestion: function(value) {
@@ -150,6 +152,7 @@ export default {
       displayKey: 'value',
       limit: 4,
       source: autocomplete,
+      async: true,
       templates: {
         empty: "",
         footer: [
@@ -170,6 +173,10 @@ export default {
     }).on('typeahead:selected', function(event, datum) {
       console.log(datum);
       window.location = datum.url; 
+    }).on('typeahead:asyncrequest', function() {
+        $('.Typeahead-spinner').show();
+    }).on('typeahead:asynccancel typeahead:asyncreceive', function() {
+        $('.Typeahead-spinner').hide();
     });
 
     $("#search-box").on('focus', function (event) {
