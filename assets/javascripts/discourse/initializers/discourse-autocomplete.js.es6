@@ -26,20 +26,20 @@ export default {
             });
     }
 
-    //Get text from the input field
-    var text = $('#search-box').val();
-    //ES Query
-    var json = {
-                "query":{
-                    "multi_match":
-                    {"query":text,
-                     "fields":[],
-                     "type":"best_fields"
-                    }
-                }
-            };
     var esUrl = 'https://test-discourse.ubnt.com.cn/elasticsearch/_search',
         autocomplete = function(query, processSync, processAsync) {
+        //Get text from the input field
+        var text = $('#search-box').val();
+        //ES Query
+        var json = {
+                    "query":{
+                        "multi_match":
+                        {"query":text,
+                         "fields":[],
+                         "type":"best_fields"
+                        }
+                    }
+                };
         var request = $.when(callAjax(esUrl, json)).done(function( request ) {
           var results = $.map([0], function() {
 
