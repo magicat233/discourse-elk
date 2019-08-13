@@ -6,121 +6,125 @@ export default {
   initialize() {},
   _initialize(options) {
     //ajax function
-    function callAjax(url,json){
+    var autocomplete = function(query, processSync, processAsync){
+      //var init
+      //Get text from the input field
+      var text = $('#search-box').val();
+      //ES Query
+      var json = {
+                  "query":{
+                      "multi_match":
+                      {"query":text,
+                       "fields":[],
+                       "type":"best_fields"
+                      }
+                  }
+              };
+      var url         =   'https://test-discourse.ubnt.com.cn/elasticsearch/_search',
+          data        =   json,
+          formatType  =   "json",
+          type        =   "post",     
+          contentType =   "application/json; charset=utf-8";
+        if(type === "post" && formatType === "json"){
+            data = JSON.stringify(data);
+        }
+        if(formatType === "json"){
+            contentType="application/json";
+        }
       return $.ajax({
-                url : url,
-                type : "POST",
-                data : JSON.stringify(json),
-                contentType : "application/json; charset=utf-8",
                 dataType : "json",
                 async : true,
-                success : function(data) {
-                    // return (data);
-                },
-                failure : function(errMsg) {
-                    alert(errMsg);
-                },
-                complete: function(XMLHttpRequest) {
-                        this; 
-                    }
+                type:type,
+                cache: false,
+                url:url,
+                data:data,
+                contentType:contentType,
+                timeout:30000
+            }).then(function(rs){
+                var dfd = $.Deferred();
+                console.log(rs);
+                var results = $.map([0], function() {     
+
+                 //Parse the results and return them
+                  var resultsData = rs.hits,
+                      resultsLength = Object.keys(resultsData.hits).length,
+                      datum = [];
+
+                 for (var i = 0; i < resultsLength; i++) {
+                    var resultsArray = resultsData.hits[i]._source,
+                        resultsIndex = resultsData.hits[i]._index;
+                    if (resultsIndex == "discourse-users") {
+                      var user_avatar = resultsArray.avatar_template.replace("\{size}", 50);
+                      datum.push({
+                          // user
+                          user_avatar_template: user_avatar,
+                          user_username: resultsArray.username,
+                          user_likes_received: resultsArray.likes_received,
+                          url: resultsArray.url
+                      });
+                    }else if (resultsIndex == "discourse-tags") {
+                      datum.push({
+                          // tag
+                          tag_name: resultsArray.name,
+                          tag_topic_count: resultsArray.topic_count,
+                          url:resultsArray.url
+                      });
+                    }else if (resultsIndex == "discourse-posts") {
+                      var topic_name = resultsArray.topic.title,
+                          topic_view = resultsArray.topic.views,
+                          topic_url = resultsArray.topic.url,
+                          category = resultsArray.category.name,
+                          category_color = resultsArray.category.color,
+                          category_url = resultsArray.category.url,
+                          author = resultsArray.user.username,
+                          author_url = resultsArray.user.url,
+                          pre = resultsArray.content;       
+
+                     datum.push({
+                          // post
+                          post_topic_name: topic_name,
+                          post_topic_view: topic_view,
+                          url: topic_url,
+                          post_category: category,
+                          post_category_color: category_color,
+                          post_category_url: category_url,
+                          post_author: author,
+                          post_author_url: author_url,
+                          post_pre: pre       
+
+                     });
+                    }       
+
+                 }
+                    return datum;
+              });
+              console.log(results);
+              processAsync(results);
+              dfd.resolve(rs);
+
+            return dfd.promise();
+            },function(){
+                alert("网络异常");
+            }).always(function(rs){
+
             });
     }
 
-    var esUrl = 'https://test-discourse.ubnt.com.cn/elasticsearch/_search',
-        autocomplete = function(query, processSync, processAsync) {
-        //Get text from the input field
-        var text = $('#search-box').val();
-        //ES Query
-        var json = {
-                    "query":{
-                        "multi_match":
-                        {"query":text,
-                         "fields":[],
-                         "type":"best_fields"
-                        }
-                    }
-                };
-        var request = $.when(callAjax(esUrl, json)).done(function( request ) {
-          var results = $.map([0], function() {
 
-              //Parse the results and return them
-              var resultsData = request.hits,
-                  resultsLength = Object.keys(resultsData.hits).length,
-                  resultsType = resultsData.hits._type,
-                  datum = [];  
-  
 
-              for (var i = 0; i < resultsLength; i++) {
-                var resultsArray = resultsData.hits[i]._source,
-                    resultsType = resultsData.hits[i]._type;
-                if (resultsType == "users") {
-                  var user_avatar = resultsArray.avatar_template.replace("\{size}", 50);
-                  datum.push({
-                      // user
-                      user_avatar_template: user_avatar,
-                      user_username: resultsArray.username,
-                      user_likes_received: resultsArray.likes_received,
-                      url: resultsArray.url
-                  });
-                }else if (resultsType == "tags") {
-                  datum.push({
-                      // tag
-                      tag_name: resultsArray.name,
-                      tag_topic_count: resultsArray.topic_count,
-                      url:resultsArray.url
-                  });
-                }else if (resultsType == "posts") {
-                  var topic_name = resultsArray.topic.title,
-                      topic_view = resultsArray.topic.views,
-                      topic_url = resultsArray.topic.url,
-                      category = resultsArray.category.name,
-                      category_color = resultsArray.category.color,
-                      category_url = resultsArray.category.url,
-                      author = resultsArray.user.username,
-                      author_url = resultsArray.user.url,
-                      pre = resultsArray.content;  
-
-                  datum.push({
-                      // post
-                      post_topic_name: topic_name,
-                      post_topic_view: topic_view,
-                      url: topic_url,
-                      post_category: category,
-                      post_category_color: category_color,
-                      post_category_url: category_url,
-                      post_author: author,
-                      post_author_url: author_url,
-                      post_pre: pre  
-
-                  });
-                }  
-
-              }  
-
-              // }
-              return datum;
-          });
-          processAsync(results);
-        });
-    };
 
 
   $('#search-box').typeahead({
-    highlight: true,
-    minLength: 1
+      highlight: true,
+      minLength: 1
     }, 
     {
       name: 'posts',
       displayKey: 'value',
-      limit: 4,
       source: autocomplete,
       async: true,
       templates: {
-        empty: [
-          '<div class="empty-message">',
-            '无结果',
-          '</div>'
-        ].join('\n'),
+        empty: "",
         suggestion: function(value) {
           if (value.post_topic_name == undefined) {
             return '<span></span>'
@@ -133,7 +137,6 @@ export default {
     },{
       name: 'users',
       displayKey: 'value',
-      limit: 4,
       source: autocomplete,
       async: true,
       templates: {
@@ -149,11 +152,14 @@ export default {
     },{
       name: 'tags',
       displayKey: 'value',
-      limit: 4,
       source: autocomplete,
       async: true,
       templates: {
-        empty: "",
+        empty: [
+          '<div class="empty-message">',
+            '无结果',
+          '</div>'
+        ].join('\n'),
         footer: [
           '<div class="show-more">',
             '<a class="advanced-search" onclick="document.location.href="/search"; document.reload();" href="/search">更多...</a>',
