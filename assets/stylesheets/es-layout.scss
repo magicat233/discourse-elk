@@ -14,7 +14,7 @@
 
 .tt-dataset {
   border-top: 1px solid $es-border-color;
-  border-left: 1px solid $es-border-color;
+  border-bottom: 1px solid $es-border-color;
   border-right: 1px solid $es-border-color;
   background-color: #fff;
   .tt-dataset-posts {
@@ -24,6 +24,9 @@
     border-left: 1px solid $es-border-color;
     background-color: $es-panel-background-color;
   }
+}
+.tt-dataset:first-child{
+  border-left: 1px solid $es-border-color;
 }
 
 /* suggestions */
@@ -158,7 +161,7 @@
 }
 .tt-menu{
   right: 0!important;
-  width: 400px;
+  width: 600px;
 }
 .Typeahead-spinner{
   position: absolute;

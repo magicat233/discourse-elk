@@ -98,7 +98,6 @@ export default {
                  }
                     return datum;
               });
-              console.log(results);
               processAsync(results);
               dfd.resolve(rs);
 
@@ -124,37 +123,6 @@ export default {
       source: autocomplete,
       async: true,
       templates: {
-        empty: "",
-        suggestion: function(value) {
-          if (value.post_topic_name == undefined) {
-            return '<span></span>'
-          }else{
-            return '<div class="es-dataset-posts"><div class="hit-post"><div class="hit-post-title-holder"><span class="hit-post-topic-title"><a href="' + value.url + '">'+ value.post_topic_name + '</a></span><span class="hit-post-topic-views" title="Number of times the topic has been viewed">'+ value.post_topic_view + '</span></div><div class="hit-post-category-tags"><span class="hit-post-category"><span class="badge-wrapper bullet"><span class="badge-category-bg" style="background-color: #'+ value.post_category_color +';"></span><a class="badge-category hit-post-category-name" href="'+ value.post_category_url +'">'+ value.post_category + '</a></span></span></div><div class="hit-post-content-holder"><a class="hit-post-username" href="'+ value.post_author_url +'">'+ value.post_author + '</a>:<span class="hit-post-content">'+ value.post_pre +'</span></div></div></div>'
-            
-          }
-        }
-      }
-    },{
-      name: 'users',
-      displayKey: 'value',
-      source: autocomplete,
-      async: true,
-      templates: {
-        empty: "",
-        suggestion: function(value) {
-          if (value.user_username == undefined) {
-            return '<span></span>'
-          }else{
-            return '<div class="es-dataset-users"><a href="'+ value.url +'"><div class="hit-user-left"><img class="hit-user-avatar" src="'+ value.user_avatar_template + '" /></div><div class="hit-user-right"><div class="hit-user-username-holder"><span class="hit-user-username">@'+ value.user_username + '</span><span class="hit-user-custom-ranking" title="Number of likes the user has received"><span class="hit-user-like-heart"> ❤ </span>' + value.user_likes_received + '</span></div></div></a></div>'
-          }
-        }
-      }
-    },{
-      name: 'tags',
-      displayKey: 'value',
-      source: autocomplete,
-      async: true,
-      templates: {
         empty: [
           '<div class="empty-message">',
             '无结果',
@@ -166,15 +134,47 @@ export default {
           '<div>'
         ].join('\n'),
         suggestion: function(value) {
-          if (value.tag_name == undefined) {
-            return '<span></span>'
+          if (value.post_topic_name != undefined) {
+            return '<div class="es-dataset-posts"><div class="hit-post"><div class="hit-post-title-holder"><span class="hit-post-topic-title"><a href="' + value.url + '">'+ value.post_topic_name + '</a></span><span class="hit-post-topic-views" title="Number of times the topic has been viewed">'+ value.post_topic_view + '</span></div><div class="hit-post-category-tags"><span class="hit-post-category"><span class="badge-wrapper bullet"><span class="badge-category-bg" style="background-color: #'+ value.post_category_color +';"></span><a class="badge-category hit-post-category-name" href="'+ value.post_category_url +'">'+ value.post_category + '</a></span></span></div><div class="hit-post-content-holder"><a class="hit-post-username" href="'+ value.post_author_url +'">'+ value.post_author + '</a>:<span class="hit-post-content">'+ value.post_pre +'</span></div></div></div>'
           }else{
-            return '<div class="es-dataset-tags"><a href="'+ value.url +'"><div class="hit-tag"><span class="hit-tag-name">#'+ value.tag_name +' </span><span class="hit-tag-topic_count" title="Number of topics with this tag"> '+ value.tag_topic_count +'</span></div></a></div>'
+            return '<span></span>'
+            
           }
         }
-
-
       }
+    },{
+      name: 'users-tags',
+      displayKey: 'value',
+      source: autocomplete,
+      async: true,
+      templates: {
+        empty: "",
+        suggestion: function(value) {
+          if (value.tag_name != undefined) {
+            return '<div class="es-dataset-tags"><a href="'+ value.url +'"><div class="hit-tag"><span class="hit-tag-name">#'+ value.tag_name +' </span><span class="hit-tag-topic_count" title="Number of topics with this tag"> '+ value.tag_topic_count +'</span></div></a></div>'
+          }else if (value.user_username != undefined){
+            return '<div class="es-dataset-users"><a href="'+ value.url +'"><div class="hit-user-left"><img class="hit-user-avatar" src="'+ value.user_avatar_template + '" /></div><div class="hit-user-right"><div class="hit-user-username-holder"><span class="hit-user-username">@'+ value.user_username + '</span><span class="hit-user-custom-ranking" title="Number of likes the user has received"><span class="hit-user-like-heart"> ❤ </span>' + value.user_likes_received + '</span></div></div></a></div>'
+          }
+        }
+      }
+    // },{
+    //   name: '',
+    //   displayKey: 'value',
+    //   source: autocomplete,
+    //   async: true,
+    //   templates: {
+    //     empty: "",
+    //     suggestion: function(value) {
+    //       if (value.tag_name == undefined) {
+    //         var returnTag = $('<span></span>');
+    //       }else{
+    //         var returnTag = $('<div class="es-dataset-tags"><a href="'+ value.url +'"><div class="hit-tag"><span class="hit-tag-name">#'+ value.tag_name +' </span><span class="hit-tag-topic_count" title="Number of topics with this tag"> '+ value.tag_topic_count +'</span></div></a></div>');
+    //       }
+    //         $('.tt-dataset-users-tags').append(returnTag);
+    //     }
+
+
+    //   }
     }).on('typeahead:selected', function(event, datum) {
       window.location = datum.url; 
     }).on('typeahead:asyncrequest', function() {
