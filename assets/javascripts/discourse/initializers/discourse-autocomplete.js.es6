@@ -97,9 +97,7 @@ export default {
                  }
                     return datum;
               });
-              console.log(results);
               processAsync(results);
-              dfd.resolve(rs);
 
             return dfd.promise();
             },function(){
@@ -154,27 +152,12 @@ export default {
             return '<div class="es-dataset-tags"><a href="'+ value.url +'"><div class="hit-tag"><span class="hit-tag-name">#'+ value.tag_name +' </span><span class="hit-tag-topic_count" title="Number of topics with this tag"> '+ value.tag_topic_count +'</span></div></a></div>'
           }else if (value.user_username != undefined){
             return '<div class="es-dataset-users"><a href="'+ value.url +'"><div class="hit-user-left"><img class="hit-user-avatar" src="'+ value.user_avatar_template + '" /></div><div class="hit-user-right"><div class="hit-user-username-holder"><span class="hit-user-username">@'+ value.user_username + '</span><span class="hit-user-custom-ranking" title="Number of likes the user has received"><span class="hit-user-like-heart"> ❤ </span>' + value.user_likes_received + '</span></div></div></a></div>'
+          }else{
+            return '<span></span>'  
           }
         }
       }
-    // },{
-    //   name: '',
-    //   displayKey: 'value',
-    //   source: autocomplete,
-    //   async: true,
-    //   templates: {
-    //     empty: "",
-    //     suggestion: function(value) {
-    //       if (value.tag_name == undefined) {
-    //         var returnTag = $('<span></span>');
-    //       }else{
-    //         var returnTag = $('<div class="es-dataset-tags"><a href="'+ value.url +'"><div class="hit-tag"><span class="hit-tag-name">#'+ value.tag_name +' </span><span class="hit-tag-topic_count" title="Number of topics with this tag"> '+ value.tag_topic_count +'</span></div></a></div>');
-    //       }
-    //         $('.tt-dataset-users-tags').append(returnTag);
-    //     }
 
-
-    //   }
     }).on('typeahead:selected', function(event, datum) {
       window.location = datum.url; 
     }).on('typeahead:asyncrequest', function() {

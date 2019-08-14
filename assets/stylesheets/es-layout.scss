@@ -154,7 +154,9 @@
     }
   }
 }
-
+.tt-dataset-posts > .es-dataset-posts:nth-last-child(2){
+  margin-bottom: 20px;
+}
 .tt-dataset-posts .show-more {
   padding: 5px;
   border-bottom: 1px solid $es-border-color;
