@@ -13,8 +13,6 @@
 }
 
 .tt-dataset {
-  border-top: 1px solid $es-border-color;
-  border-bottom: 1px solid $es-border-color;
   border-right: 1px solid $es-border-color;
   background-color: #fff;
   .tt-dataset-posts {
@@ -27,6 +25,7 @@
 }
 .tt-dataset:first-child{
   border-left: 1px solid $es-border-color;
+  flex-grow: 2;
 }
 
 /* suggestions */
@@ -121,6 +120,7 @@
     padding: 12px;
     &:last-child {
       border-bottom: none;
+      margin-bottom: 20px;
   }
   .hit-post {
     .hit-post-topic-title {
@@ -155,9 +155,12 @@
   }
 }
 
-.show-more {
+.tt-dataset-posts .show-more {
   padding: 5px;
   border-bottom: 1px solid $es-border-color;
+  width: 98%;
+  position: absolute;
+  bottom: 0;
 }
 .tt-menu{
   right: 0!important;
