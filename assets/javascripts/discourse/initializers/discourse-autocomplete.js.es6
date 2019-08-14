@@ -42,7 +42,6 @@ export default {
                 timeout:30000
             }).then(function(rs){
                 var dfd = $.Deferred();
-                console.log(rs);
                 var results = $.map([0], function() {     
 
                  //Parse the results and return them
@@ -98,6 +97,7 @@ export default {
                  }
                     return datum;
               });
+              console.log(results);
               processAsync(results);
               dfd.resolve(rs);
 
