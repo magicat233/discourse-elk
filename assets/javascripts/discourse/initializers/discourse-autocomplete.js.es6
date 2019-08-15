@@ -5,9 +5,13 @@ export default {
   name: "discourse-autocomplete",
   initialize() {},
   _initialize(options) {
+      //getlogin status
+      var currentUser = Discourse.User.current();
+      if (!currentUser) {
+        $('.Typeahead-spinner').css("left","390px");
+      }
     //ajax function
     var autocomplete = function(query, processSync, processAsync){
-      //var init
       //Get text from the input field
       var text = $('#search-box').val();
       //ES Query
